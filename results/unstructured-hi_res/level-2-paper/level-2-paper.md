@@ -134,11 +134,15 @@ architecture but use independent parameters to accommodate appearance difference
 B. Feature Decoupling and Alignment Module (FDAM)
 Applying deformable convolutions [32] directly to raw multimodal features is unreliable: the offset predictor confuses genuine spatial displacements with the inherent appearance gap between RGB texture and thermal radiation. FDAM addresses this with a decouple-then-align strategy based on the observation that object geometry is more stable across modalities than appearance cues [36], [38]. It first separates each modality into a shared structural branch and a private perceptual branch via AFD, estimates deformable offsets in the shared subspace via IAA, and reuses the same geometric cor- rections for the private branches under illumination-adaptive anchor selection.
 1) Asymmetric Feature Decoupling (AFD): As shown in Fig. 4(a), AFD decomposes each stage into one shared en- coder and two private encoders. The shared encoder ϕs is a lightweight two-layer Conv-BN-ReLU block whose weights are shared across the RGB and thermal streams, encouraging both modalities to meet in a common structural subspace. In contrast, each private encoder is a shallower modality- specific single-layer block, so it mainly retains sensory details such as RGB texture and thermal intensity patterns instead of re-encoding high-level semantics. Formally, for stage i, the decoupling process is defined as:
-F s(i) R = ϕs(F (i) R ), F p(i) R(F (i) R = ϕp R ), F s(i) T = ϕs(F (i) T ), F p(i) T(F (i) T = ϕp T ), (1)
+
+![Formula: figure-3-1.jpg](images/figure-3-1.jpg)
+
 where ϕs denotes the parameter-shared encoder, and ϕp
 T denote the modality-specific private encoders.
 R, ϕp
 Following shared-private disentanglement ideas in multi- modal representation learning [35], we train AFD with three mutually dependent losses. The primary objective is a patch- based contrastive alignment loss L(i) align that pulls correspond- ing structural patches together while separating mismatched ones:
-() log exp( Phy j Prog /T T) align ~ on » bj os, exp(PH yj Pro,k /T tT)’ (2)
+
+![Formula: figure-3-2.jpg](images/figure-3-2.jpg)
+
 where ˆPR, ˆPT ∈ RB×Ni×Ci are ℓ2-normalized patch vectors obtained by average pooling with kernel size 8, yielding Ni = ⌊Hi/8⌋×⌊Wi/8⌋ patches per stage, and τ = 0.07. The combined downsampling of the encoder (2i+1) and the pool- ing stride subsumes residual cross-modal offsets within each patch, so Lalign enforces structural correspondence rather than
 3
