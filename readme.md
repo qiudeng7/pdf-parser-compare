@@ -44,7 +44,7 @@
 
 ## 测试结果
 
-各工具的转换结果存放在 `results/` 目录下。
+各工具的转换结果存放在 `results/` 目录下, 测试环境为 3070ti laptop, 8G 显存 + 32G 运行内存, 系统环境为 wsl.
 
 ### 目录结构
 
@@ -60,7 +60,7 @@ results/
 
 | 工具 | 说明 |
 |------|------|
-| doc2x | 网页版在线转换工具 |
+| doc2x | 付费 api, 闭源模型, 10 块钱可以处理 500 页 pdf |
 | marker | 开源本地转换工具，支持 LLM 增强 |
 | unstructured-fast | Unstructured 快速模式，直接提取文本 |
 | unstructured-hi_res | Unstructured 高精度模式，布局分析+图片提取 |
@@ -72,42 +72,46 @@ results/
 
 ## 测试总结
 
-### 速度对比
+所有的对比项的结果都在仓库中可以查看, 下面是我的主观评价, 具体效果可以自己查看 markdown.
 
-| 工具/策略 | 处理时间 | 说明 |
-|-----------|----------|------|
-| unstructured-fast | 几秒 | 速度最快，但质量完全不可用 |
-| unstructured-hi_res | 几十秒 | 速度较快，质量可用 |
-| doc2x | 几十秒 | 网页在线处理 |
-| marker | 几分钟 | 速度最慢 |
+### 运行速度
 
-### 各级别详细评价
+1. marker 最慢, 五分钟到十分钟
+2. unstructured 的 hires 模式 (high resolution) 和 doc2x 速度差不多, 三十秒到一分钟
+3. unstructured 的 fast 模式最快，十秒以内, 但是效果几乎不可用.
+
+### 处理结果
 
 #### Level 1 - Markdown PDF
 
-| 工具 | 评价 |
+所有工具都能正确处理文字, 但是格式不一定.
+
+| 工具 | 对比 |
 |------|------|
-| **marker** | 优于 doc2x，能处理粗体字和多级列表 |
-| **doc2x** | 不能识别粗体和嵌套列表 |
+| **marker** | 能处理粗体字和多级列表 |
+| **doc2x** | 不能识别粗体和多级列表 |
 | **unstructured** | 与 doc2x 相近，不能识别粗体和嵌套列表 |
+
 
 #### Level 2 - 学术论文
 
 | 工具 | 评价 |
 |------|------|
-| **marker** | 排版处理最符合直觉，优于 doc2x；公式处理能力与 doc2x 相当 |
-| **doc2x** | 少量段落排版错位，图片位置处理正确 |
-| **unstructured** | 排版略优于 doc2x 但不如 marker；会将连续段落合并；无公式 LaTeX 转换能力（仅提取图片） |
+| **marker** | 排版处理最符合直觉，优于 doc2x；可以正确公式转换latex |
+| **doc2x** | 少量段落排版错位; 可以正确公式 转换 latex |
+| **unstructured** | 会将连续段落合并; 无公式 LaTeX 转换能力（仅提取图片）, 但可以外接其他工具搭配使用. |
 
-**排版能力排序**：marker > unstructured > doc2x
+**主观排版能力排序**：marker > unstructured > doc2x
 
 #### Level 3 - Markdown 截图（中文 OCR）
 
 | 工具 | 评价 |
 |------|------|
-| **doc2x** | 几乎无质量下降，OCR 中文能力强 |
+| **doc2x** | 相比 level 1 几乎无质量下降，OCR 中文能力强 |
 | **marker** | 相比 Level 1 有质量下降，纯图片中文处理不如 doc2x |
-| **unstructured** | 相比 Level 1 有质量下降，类似 marker |
+| **unstructured** | 相比 Level 1 有质量下降，同上 |
+
+结果说明对于中文纯图片 pdf, 只有 doc2x 的效果比较理想.
 
 #### Level 4 - 论文截图（英文 OCR）
 
@@ -117,7 +121,9 @@ results/
 | **doc2x** | 与 Level 2 结果一致 |
 | **unstructured** | 相比 Level 2 几乎无质量下降 |
 
-### 工具特性对比
+结果说明开源的 marker 和 unstructured 其实也有不错的 ocr 能力, 只是对中文效果一般.
+
+### 总结
 
 | 特性 | doc2x | marker | unstructured |
 |------|-------|--------|--------------|
@@ -128,17 +134,6 @@ results/
 | 排版还原 | 一般 | 优秀 | 较好 |
 | 速度 | 中等 | 慢 | 快 |
 
-### 综合建议
-
 **总体最优**：unstructured 在速度、质量、成本方面综合最优。
 
-**混合方案**（复杂场景推荐）：
-
-| 场景 | 推荐工具 |
-|------|----------|
-| 中文纯图片 PDF | doc2x |
-| 复杂排版 | marker |
-| 通用场景 | unstructured-hi_res |
-| 速度优先 | unstructured-fast（质量要求低时） |
-
-**unstructured 设计理念**：专注于输入和分析，输出需自定义。公式无法转 LaTeX，但可通过外接工具实现。
+实际应用推荐混合方案: 大部分 pdf 可以用 unstructured 开源版的 hi_res 模式; 中文扫描件使用 doc2x; 复杂排版用 marker; 如果需要极快处理且对质量要求不高, 用 unstructured 的 fast 模式; 理论上 marker 使用 llm 增强可以处理的更好.
