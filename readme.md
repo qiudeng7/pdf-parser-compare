@@ -1,8 +1,8 @@
-# PDF Parser Compare
+# PDF Parser Comparison
 
-用于测试和对比各类 PDF 转 Markdown 工具的效果。
+对比各 PDF 转 Markdown 工具的效果。
 
-## 测试pdf
+## 用于测试的 pdf (测试集)
 
 本测试集包含四个难度层级的 PDF 文件，位于`test-pdfs` 目录下，用于评估解析工具在不同场景下的表现。
 
@@ -65,22 +65,10 @@ results/
 | unstructured-fast | Unstructured 快速模式，直接提取文本 |
 | unstructured-hi_res | Unstructured 高精度模式，布局分析+图片提取 |
 
+未成功的对比项:
 - **unstructured-ocr_only**：部署时遇到环境问题（poppler-utils依赖），暂时未成功运行测试
 - **marker-llm**：理论上可提高质量，但部署遇到网络问题（未测试成功）
 
-
-### doc2x 测试评价
-
-| 级别 | 文本提取 | 格式还原 | 公式处理 | 图片处理 | 总体评价 |
-|------|----------|----------|----------|----------|----------|
-| Level 1 | ✓ 正确 | 部分问题 | N/A | ✓ 很好 | 文字处理正确，但丢失粗体，嵌套无序列表识别有问题 |
-| Level 2 | ✓ 正确 | ✓ 正确 | ✓ 全部正确 | ✓ 很好 | 少量段落排版会错位；另外 PDF 本身的图片排版就比较难以理解，但是对图片的位置处理是正确的 |
-| Level 3 | ✓ 正确 | 部分问题 | N/A | ✓ 很好 | 与 Level 1 结果一致，OCR 效果良好 |
-| Level 4 | ✓ 正确 | ✓ 正确 | ✓ 全部正确 | ✓ 很好 | 与 Level 2 结果一致，OCR 复杂内容能力强 |
-
-**Level 1 问题示例：嵌套列表识别错误**
-
-![doc2x Level 1 列表问题](images/doc2x-level1-list-issue.png)
 
 ## 测试总结
 
