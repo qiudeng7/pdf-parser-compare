@@ -2,10 +2,11 @@ services:
   marker:
     build:
       context: .
-      dockerfile: docker/marker.Dockerfile
+      dockerfile: marker.Dockerfile
     volumes:
       - ../test-pdfs:/data/test-pdfs
       - ../results:/data/results
+      - ./scripts:/data/scripts
     environment:
       - TORCH_DEVICE=cuda
       - NVIDIA_VISIBLE_DEVICES=all
@@ -22,10 +23,11 @@ services:
   marker-llm:
     build:
       context: .
-      dockerfile: docker/marker.Dockerfile
+      dockerfile: marker.Dockerfile
     volumes:
       - ../test-pdfs:/data/test-pdfs
       - ../results:/data/results
+      - ./scripts:/data/scripts
     environment:
       - TORCH_DEVICE=cuda
       - NVIDIA_VISIBLE_DEVICES=all
@@ -45,10 +47,11 @@ services:
   unstructured:
     build:
       context: .
-      dockerfile: docker/unstructured.Dockerfile
+      dockerfile: unstructured.Dockerfile
     volumes:
       - ../test-pdfs:/data/test-pdfs
       - ../results:/data/results
+      - ./scripts:/data/scripts
     environment:
       - NVIDIA_VISIBLE_DEVICES=all
     deploy:
