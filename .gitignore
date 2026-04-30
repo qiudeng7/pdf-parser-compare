@@ -1,1 +1,4 @@
 ai-reference
+.venv
+unstructured-test/.venv
+.vscode
