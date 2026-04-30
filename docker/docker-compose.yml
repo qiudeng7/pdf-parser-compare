@@ -1,0 +1,62 @@
+services:
+  marker:
+    build:
+      context: .
+      dockerfile: docker/marker.Dockerfile
+    volumes:
+      - ../test-pdfs:/data/test-pdfs
+      - ../results:/data/results
+    environment:
+      - TORCH_DEVICE=cuda
+      - NVIDIA_VISIBLE_DEVICES=all
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    working_dir: /data
+    command: /bin/bash
+
+  marker-llm:
+    build:
+      context: .
+      dockerfile: docker/marker.Dockerfile
+    volumes:
+      - ../test-pdfs:/data/test-pdfs
+      - ../results:/data/results
+    environment:
+      - TORCH_DEVICE=cuda
+      - NVIDIA_VISIBLE_DEVICES=all
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - OPENAI_BASE_URL=${OPENAI_BASE_URL}
+      - OPENAI_MODEL=${OPENAI_MODEL}
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    working_dir: /data
+    command: /bin/bash
+
+  unstructured:
+    build:
+      context: .
+      dockerfile: docker/unstructured.Dockerfile
+    volumes:
+      - ../test-pdfs:/data/test-pdfs
+      - ../results:/data/results
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    working_dir: /data
+    command: /bin/bash
