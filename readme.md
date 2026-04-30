@@ -2,9 +2,9 @@
 
 用于测试和对比各类 PDF 转 Markdown 工具的效果。
 
-## 测试集
+## 测试pdf
 
-本测试集包含四个难度层级的 PDF 文件，用于评估解析工具在不同场景下的表现。
+本测试集包含四个难度层级的 PDF 文件，位于`test-pdfs` 目录下，用于评估解析工具在不同场景下的表现。
 
 | 级别 | 文件名 | 难度 | 描述 |
 |------|--------|------|------|
@@ -41,24 +41,6 @@
 - 特点：无文本层、内容复杂、需 OCR
 - 测试重点：复杂内容的 OCR 能力、公式图表识别
 
-### 目录结构
-
-```
-test-pdfs/
-├── level-1-markdown.pdf           # 简单
-├── level-2-paper.pdf              # 中等
-├── level-3-markdown-picture.pdf   # 困难
-└── level-4-paper-picture.pdf      # 最困难
-```
-
-### 评估维度
-
-- 文本提取准确率
-- 格式还原程度
-- 表格识别效果
-- 数学公式处理
-- OCR 质量（针对图片型 PDF）
-- 处理速度
 
 ## 测试结果
 
@@ -82,6 +64,10 @@ results/
 | marker | 开源本地转换工具，支持 LLM 增强 |
 | unstructured-fast | Unstructured 快速模式，直接提取文本 |
 | unstructured-hi_res | Unstructured 高精度模式，布局分析+图片提取 |
+
+- **unstructured-ocr_only**：部署时遇到环境问题（poppler-utils依赖），暂时未成功运行测试
+- **marker-llm**：理论上可提高质量，但部署遇到网络问题（未测试成功）
+
 
 ### doc2x 测试评价
 
@@ -153,11 +139,6 @@ results/
 | 英文 OCR | 优秀 | 良好 | 良好 |
 | 排版还原 | 一般 | 优秀 | 较好 |
 | 速度 | 中等 | 慢 | 快 |
-
-### 排除选项
-
-- **unstructured-ocr_only**：遇到复杂环境问题（poppler-utils依赖），暂时未成功运行测试
-- **marker-llm**：理论上可提高质量，但部署遇到网络问题（未测试成功）
 
 ### 综合建议
 
