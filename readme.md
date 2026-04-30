@@ -156,7 +156,7 @@ results/
 
 ### 排除选项
 
-- **unstructured-ocr_only**：时间慢且效果差，被 hi_res 完全替代
+- **unstructured-ocr_only**：遇到复杂环境问题（poppler-utils依赖），暂时未成功运行测试
 - **marker-llm**：理论上可提高质量，但部署遇到网络问题（未测试成功）
 
 ### 综合建议
